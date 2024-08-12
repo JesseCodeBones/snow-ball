@@ -1,12 +1,14 @@
 
 #include "./server.hpp"
 #include <chrono>
+#include <iomanip>
 #include <iostream>
 #include <netinet/in.h>
 #include <string_view>
 #include <sys/socket.h>
 #include <thread>
 #include <unistd.h>
+#include <chrono>
 
 void server::start() {
   struct sockaddr_in local_addr, client_addr;
@@ -45,6 +47,9 @@ void server::start() {
   char buffer[1024];
   std::string_view message = "Hello, client!";
   while (1) {
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    std::tm* local_time = std::localtime(&now_c);
     n = recv(client_fd, buffer, sizeof(buffer), 0);
     if (n <= 0) {
       std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -53,6 +58,6 @@ void server::start() {
     std::this_thread::sleep_for(std::chrono::seconds(1));
     send(client_fd, message.data(), message.size(), 0);
     std::string_view message(buffer, n);
-    std::cout << message << std::endl;
+    std::cout << std::put_time(local_time, "%Y-%m-%d %H:%M:%S") << " - " << message << std::endl;
   }
 }

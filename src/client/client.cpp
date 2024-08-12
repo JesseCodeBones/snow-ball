@@ -3,12 +3,14 @@
 #include "fcntl.h"
 #include <arpa/inet.h>
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 #include <string_view>
 #include <sys/socket.h>
 #include <thread>
 #include <unistd.h>
 #include <vector>
+#include <chrono>
 
 void client::start() {
 
@@ -32,7 +34,10 @@ void client::start() {
   int n = 0;
 
   while ((n = recv(remote_fd, buffer, sizeof(buffer), 0)) > 0) {
-    std::cout << "Received from server: " << buffer << std::endl;
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    std::tm* local_time = std::localtime(&now_c);
+    std::cout << "Received from server: " << std::put_time(local_time, "%Y-%m-%d %H:%M:%S") << " - " << buffer << std::endl;
     send(remote_fd, message.data(), message.size(), 0);
   }
 }
