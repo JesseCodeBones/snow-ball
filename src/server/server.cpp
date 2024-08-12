@@ -45,7 +45,7 @@ void server::start() {
       accept(listen_fd, (struct sockaddr *)&client_addr, &client_addr_len);
   int n;
   char buffer[1024];
-  std::string_view message = "Hello, client!";
+  std::string_view  message("Hello, client!");
   while (1) {
     auto now = std::chrono::system_clock::now();
     std::time_t now_c = std::chrono::system_clock::to_time_t(now);
