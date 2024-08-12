@@ -15,7 +15,7 @@ void server::start() {
 // 绑定本地地址和端口
   local_addr.sin_family = AF_INET;
   local_addr.sin_addr.s_addr = INADDR_ANY;
-  local_addr.sin_port = htons(8081);
+  local_addr.sin_port = htons(3355);
 
   
   int listen_fd;
