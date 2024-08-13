@@ -64,7 +64,7 @@ void server::start() {
       std::this_thread::sleep_for(std::chrono::seconds(1));
       send(client_fd, message.data(), message.size(), 0);
       std::string_view message(buffer, n);
-      std::cout << std::put_time(local_time, "%Y-%m-%d %H:%M:%S") << " - " << "heart beat from :" << ip_str << ":" << port << " - "
+      std::cout << std::put_time(local_time, "%Y-%m-%d %H:%M:%S") << " - " << "heart beat from: " << ip_str << ":" << port << " - "
                 << message << std::endl;
     }
   }
