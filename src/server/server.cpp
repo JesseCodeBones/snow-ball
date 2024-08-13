@@ -1,6 +1,8 @@
 
 #include "./server.hpp"
 #include <chrono>
+#include <arpa/inet.h>
+#include <cstdint>
 #include <iomanip>
 #include <iostream>
 #include <netinet/in.h>
@@ -41,6 +43,17 @@ void server::start() {
   int client_fd = -1;
   while ((client_fd = accept(listen_fd, (struct sockaddr *)&client_addr,
                              &client_addr_len)) > 0) {
+    struct sockaddr_in client_addr;
+    uint32_t client_addr_len ;
+    getpeername(client_fd, (struct sockaddr*)&client_addr, &client_addr_len);
+
+    char ip_str[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &client_addr.sin_addr, ip_str, sizeof(ip_str));
+    int port = ntohs(client_addr.sin_port);
+
+    std::cout << "Peer IP address: " << ip_str << std::endl;
+    std::cout << "Peer port: " << port << std::endl;
+
     int n = -1;
     char buffer[1024];
     std::string_view message("Hello, client!");
@@ -51,7 +64,7 @@ void server::start() {
       std::this_thread::sleep_for(std::chrono::seconds(1));
       send(client_fd, message.data(), message.size(), 0);
       std::string_view message(buffer, n);
-      std::cout << std::put_time(local_time, "%Y-%m-%d %H:%M:%S") << " - "
+      std::cout << std::put_time(local_time, "%Y-%m-%d %H:%M:%S") << " - " << "heart beat from :" << ip_str << ":" << port << " - "
                 << message << std::endl;
     }
   }
