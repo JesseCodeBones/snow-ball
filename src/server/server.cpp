@@ -57,6 +57,26 @@ void server::start() {
     int n = -1;
     char buffer[1024];
     std::string_view message("Hello, client!");
+    n = recv(client_fd, buffer, sizeof(buffer), 0);
+
+    if (n <= 0) {
+      // close client fd
+      close(client_fd);
+      continue;
+    }
+
+    if (std::string_view(buffer, n) != "Hello, server!") {
+      // close client fd
+      std::string_view fMessage("F U, you are not one of us!");
+      std::cout << fMessage << std::endl;
+      send(client_fd, fMessage.data(), fMessage.size(), 0);
+      std::cout << "Peer IP address: " << ip_str << std::endl;
+      std::cout << "Peer port: " << port << std::endl;
+      close(client_fd);
+      continue;
+    }
+
+
     while ((n = recv(client_fd, buffer, sizeof(buffer), 0)) > 0) {
       auto now = std::chrono::system_clock::now();
       std::time_t now_c = std::chrono::system_clock::to_time_t(now);

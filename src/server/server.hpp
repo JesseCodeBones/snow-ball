@@ -4,5 +4,8 @@
 class server {
 public:
   void start();
+
+private:
+  int remote_fd = -1;
 };
 #endif
