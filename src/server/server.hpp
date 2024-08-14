@@ -10,7 +10,5 @@ private:
   int remote_fd = -1;
   std::string remote_host;
   int remote_port = -1;
-  void proxy();
-  static void async_handle(int client_fd, std::string_view remote_host, int remote_port);
 };
 #endif

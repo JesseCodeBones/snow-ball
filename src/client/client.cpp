@@ -18,9 +18,9 @@ void client::start() {
   int remote_fd = socket(AF_INET, SOCK_STREAM, 0);
   std::cout << "Connected to remote server = " << remote_fd << std::endl;
   remote_addr.sin_family = AF_INET;
-  remote_addr.sin_addr.s_addr = inet_addr("43.139.96.180");
+  remote_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
   // remote_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-  remote_addr.sin_port = htons(3355);
+  remote_addr.sin_port = htons(2255);
 
   if (connect(remote_fd, (struct sockaddr *)&remote_addr, sizeof(remote_addr)) <
       0) {
